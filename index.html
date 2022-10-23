@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>Parametric Polymorphism</title>
+
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/white.css" />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+
+    <style>
+      code {
+        border: 1px solid #333;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+            <h1>From JS to strict TS</h1>
+        </section>
+
+        <section>
+            <h2>Why?</h2>
+
+            <ul>
+                <li>2 projects migration</li>
+                <li>Between 500 and 1000 files</li>
+                <li>One of them had already started the migration</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Migration in 2 steps</h2>
+            <ul>
+                <li>JS to lenient TS</li>
+                <li>lenient TS to strict TS</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Lenient? Strict?</h2>
+
+            <ul>
+                <li class="fragment">Massive usage of <code>any</code> and <code>@ts-expect-error</code></li>
+
+            </ul>
+        </section>
+
+        <section>
+            <h2>JS to lenient TS</h2>
+            <ul>
+                <li>Progressive approach</li>
+                <li>Big bang mode</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Progressive approach</h2>
+            <ul>
+                <li>Migration one file by one file</li>
+                <li>Each file can be done with any level of strictness we want - <code>any</code> everywhere or no <code>any</code></li>
+            </ul>
+
+        </section>
+
+          <section>
+              <h2>Tips & Tricks</h2>
+              * allowJS
+              * checkJS
+              * use any only needed, prefer unknown
+              * depending of the code age:
+                 - updating function + .prototype to class
+              * @ts-expect-error instead of @ts-ignore
+
+
+          </section>
+
+          <section>
+              <h2>TS is not JS</h2>
+              * replacement of mutable code / dynamic calls /etc.
+          </section>
+
+
+          <section>
+              <h2>Big bang solution</h2>
+              <a href="https://github.com/airbnb/ts-migrate">TS-migrate</a>
+
+              <ul>
+                  <li>Same than above, but all at once</li>
+                  <li>More <code>any</code> and <code>ts-ignore</code></li>
+                  <li><code>TSFixMe</code> alias of <code>any</code> </li>
+              </ul>
+          </section>
+
+          <section>
+              <h2>lenient TS to strict TS</h2>
+
+              <ul>
+                  <li>File by file</li>
+                  <li>Remove <code>any</code></li>
+              </ul>
+          </section>
+
+          <section>
+              <h2>Tips & Tricks</h2>
+              <ul>
+                  <li>Use ad-hoc type</li>
+              </ul>
+          </section>
+
+          <section>
+              <h2>Ensuring nobody's else is re-adding error when fixed a file?</h2>
+          </section>
+
+          <section>
+              <h2>Double tsconfig solution</h2>
+          </section>
+
+          <section>
+              <h2>Conclusion</h2>
+              <ul>
+                  <li>Not really hard...</li>
+                  <li>...but takes a continuous effort</li>
+              </ul>
+          </section>
+
+        <section>
+          <h2>Questions?</h2>
+        </section>
+      </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+    </script>
+  </body>
+</html>
