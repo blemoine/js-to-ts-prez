@@ -1,8 +1,10 @@
-function median(arr: any) {
+// @ts-expect-error TS(2304): Cannot find name '$TSFixMe'.
+function median(arr: $TSFixMe) {
   return arr.sort()[arr.length / 2];
 }
 
-function average(arr: any) {
+// @ts-expect-error TS(2304): Cannot find name '$TSFixMe'.
+function average(arr: $TSFixMe) {
   let result;
   for (let i = 0; i < arr.length; ++i) {
     if (result === undefined) {
@@ -15,7 +17,8 @@ function average(arr: any) {
   return result / arr.length;
 }
 
-function groupByAge(arr: any) {
+// @ts-expect-error TS(2304): Cannot find name '$TSFixMe'.
+function groupByAge(arr: $TSFixMe) {
   const result = {};
 
   for (let user of arr) {
