@@ -96,7 +96,10 @@
           <section>
               <h2>Big bang solution</h2>
               <a href="https://github.com/airbnb/ts-migrate">TS-migrate</a>
-
+              <pre><code data-trim class="bash">npm i -D typescript ts-migrate && \
+                         ts-migrate init . && \
+                         ts-migrate rename . && \
+                         ts-migrate --aliases=tsfixme migrate .</code></pre>
               <ul>
                   <li>Same than above, but all at once</li>
                   <li>More <code>any</code> and <code>ts-ignore</code></li>
