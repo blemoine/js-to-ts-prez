@@ -22,122 +22,460 @@
         padding-left: 10px;
         padding-right: 10px;
       }
+
+      /*
+      pre.hide-completely {
+        display: none;
+      }
+      pre.hide-completely.current-fragment {
+        display: block;
+      }
+
+       */
     </style>
   </head>
   <body>
     <div class="reveal">
       <div class="slides">
         <section>
-            <h1>From JS to strict TS</h1>
+          <h2>4 months ago...</h2>
+          <ul>
+            <li>Starting a new job</li>
+            <li class="fragment">
+              Main project is 10 years old
+              <span
+
+                style="text-align: center; display: inline-block; width: 100%"
+                ><img
+                  alt="jurassik park gate"
+                  src="img/jurassik.jpg"
+                  style="width: 300px"
+              /></span>
+            </li>
+            <li class="fragment">Migration to TS started...</li>
+            <li class="fragment">...and never finished</li>
+          </ul>
         </section>
 
         <section>
-            <h2>Why?</h2>
+          <h2>Who am I?</h2>
+          <ul
+            style="
+              display: inline-block;
+              width: 600px;
+              vertical-align: top;
+              position: relative;
+            "
+          >
+            <li>Benoît Lemoine</li>
+            <li>
+              <a href="https://lemoine-benoit.medium.com/"
+                >https://lemoine-benoit.medium.com/</a
+              >
+            </li>
 
-            <ul>
-                <li>2 projects migration</li>
-                <li>Between 500 and 1000 files</li>
-                <li>One of them had already started the migration</li>
-            </ul>
+            <li>
+              <a href="https://twitter.com/benoit_lemoine">@benoit_lemoine</a>
+            </li>
+            <li class="fragment">I have around 400 files to migrate in TS</li>
+          </ul>
+          <img
+            style="display: inline-block; width: 250px; vertical-align: top"
+            src="img/Moloch.png"
+            alt="Most beautiful animal in the world: the Moloch (aka. thorny devil)"
+          />
         </section>
 
         <section>
-            <h2>Migration in 2 steps</h2>
-            <ul>
-                <li>JS to lenient TS</li>
-                <li>lenient TS to strict TS</li>
-            </ul>
+          <h1>
+            From JavaScript<br />
+            to<br />
+            strict TypeScript
+          </h1>
         </section>
 
         <section>
-            <h2>Lenient? Strict?</h2>
-
-            <ul>
-                <li class="fragment">Massive usage of <code>any</code> and <code>@ts-expect-error</code></li>
-
-            </ul>
+          <h2>Migration in 2 steps</h2>
+          <ul>
+            <li>JavaScript to lenient TypeScript</li>
+            <li>lenient TypeScript to strict TypeScript</li>
+          </ul>
         </section>
 
         <section>
-            <h2>JS to lenient TS</h2>
-            <ul>
-                <li>Progressive approach</li>
-                <li>Big bang mode</li>
-            </ul>
+          <h2>Lenient? Strict?</h2>
+
+          <ul>
+            <li class="fragment">
+              Massive usage of <code>any</code> and
+              <code>@ts-expect-error</code>
+            </li>
+              <li class="fragment">
+                  Non strict configuration (<code>noImplicitAny</code>, <code>strictNullChecks</code>, etc.)
+              </li>
+          </ul>
         </section>
 
         <section>
-            <h2>Progressive approach</h2>
-            <ul>
-                <li>Migration one file by one file</li>
-                <li>Each file can be done with any level of strictness we want - <code>any</code> everywhere or no <code>any</code></li>
-            </ul>
+          <h2>JS to lenient TS</h2>
+          <ul>
+            <li>Progressive approach</li>
+            <li>Big bang mode</li>
+          </ul>
+        </section>
 
+        <section>
+          <h2>Progressive approach</h2>
+          <ul>
+            <li class="fragment">
+              <code>npm install --save-dev typescript </code>
+            </li>
+            <li class="fragment">Add a <code>tsconfig.json</code> file</li>
+            <li class="fragment">
+              Add the option <code>"allowJS": true</code>
+            </li>
+            <li class="fragment">Migrate files one by one</li>
+            <li class="fragment">
+              Each file can be done with any level of strictness we want
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Tips & Tricks</h2>
+          <ul>
+            <li class="fragment">
+              Favor <code>unknown</code> over <code>any</code>
+            </li>
+            <li class="fragment">
+              Favor <code>@ts-expect-error</code> over <code>@ts-ignore</code>
+            </li>
+            <li class="fragment">Minimize casts</li>
+            <li class="fragment">
+              Good time to update the code to modern idioms
+            </li>
+          </ul>
+        </section>
+
+        <section data-transition="none">
+          <h2>TS is not JS</h2>
+
+          <pre class=""><code class="javascript" data-trim>
+function User(birthdate) {
+    this.birthdate = birthdate;
+}
+
+User.prototype.getAge = function() {
+    var yearDuration = 24 * 60 * 60 * 1000 * 365
+    return Math.floor((Date.now() - this.birthdate.getTime()) / yearDuration);
+}
+
+module.exports = User
+                  </code></pre>
+        </section>
+
+        <section data-transition="none">
+          <h2>TS is not JS</h2>
+
+          <pre class=""><code class="typescript" data-trim>
+class User {
+  constructor(public birthdate: Date){}
+
+  getAge(): number {
+    const yearDuration = 24 * 60 * 60 * 1000 * 365
+    return Math.floor((Date.now() - this.birthdate.getTime()) / yearDuration);
+  }
+}
+                  </code></pre>
+        </section>
+
+        <section data-transition="none">
+          <h2>TS is not JS</h2>
+          <pre class=""><code class="javascript">
+function groupByAge(arr) {
+  const result = {};
+  for (let user of arr) {
+    const age = user.age;
+
+
+
+
+    if (!result[age]) { result[age] = []; }
+    result[age].push(user);
+  }
+  return result;
+}
+              </code></pre>
+        </section>
+        <section data-transition="none">
+          <h2>TS is not JS</h2>
+
+          <pre class=""><code class="typescript" data-trim>
+type User = {id:string, name:string, age:number}
+function groupByAge(arr: User[]): Record&lt;string, User[]>  {
+  const result = {};
+  for (let user of arr) {
+    const age = user.age;
+// Element implicitly has an 'any' type because expression
+// of type 'number' can't be used to index type '{}'.
+// No index signature with a parameter of type 'number'
+// was found on type '{}'.(7053)
+    if (!result[age]) { result[age] = []; }
+    result[age].push(user);
+  }
+  return result;
+}
+
+              </code></pre>
+        </section>
+        <section data-transition="none">
+          <h2>TS is not JS</h2>
+
+          <pre class=""><code class="typescript" data-trim>
+type User = {id:string, name:string, age:number}
+function groupByAge(arr: User[]): Record&lt;string, User[]>  {
+  const result: Record&lt;string, User[]> = {};
+  for (let user of arr) {
+    const age = user.age;
+
+
+
+
+    if (!result[age]) { result[age] = []; }
+    result[age].push(user);
+  }
+  return result;
+}
+
+              </code></pre>
+        </section>
+
+        <section data-transition="none">
+          <h2>TS is not JS</h2>
+          <pre class=""><code class="typescript">
+
+function buildUser(attributes) {
+
+
+    return attributes.reduce((acc, [key, value]) => {
+        acc[key] = value;
+
+        return acc;
+    },{})
+}
+</code></pre>
+        </section>
+        <section data-transition="none">
+          <h2>TS is not JS</h2>
+          <pre class=""><code data-trim class="typescript">
+type User = {id:string, age:number}
+type Attributes = [string, string | number][];
+
+function buildUser(attributes: Attributes): User {
+    // Type '{}' is missing the following
+    // properties from type 'User': id, age
+    return attributes.reduce((acc, [key, value]) => {
+        acc[key] = value;
+
+        return acc;
+    },{})
+}
+</code></pre>
+        </section>
+        <section data-transition="none">
+          <h2>TS is not JS</h2>
+          <pre class=""><code data-trim class="typescript">
+type User = {id:string, age:number}
+type Attributes = [string, string | number][];
+
+function buildUser(attributes: Attributes): User {
+    const id = attributes.find(([key]) => key === 'id');
+    const age = attributes.find(([key]) => key === 'age');
+
+    if (!id || !age
+        || typeof id[1] !== 'string'
+        || typeof age[1] !== 'number') {
+      throw new Error(`Invalid attributes ${attributes}`);
+    }
+    return { id: id[1], age: age[1] }
+}
+</code></pre>
+        </section>
+        <section data-transition="none">
+          <h2>TS is not JS</h2>
+          <pre class=""><code data-trim class="typescript">
+type User = {id:string, age:number}
+type Attributes = [['id', string], ['age', number]];
+
+function buildUser(attributes: Attributes): User {
+
+    return {
+      id: attributes[0][1],
+      age: attributes[1][1]
+    }
+}
+</code></pre>
+        </section>
+
+        <section>
+          <h2>Big bang solution</h2>
+          <a href="https://github.com/airbnb/ts-migrate">TS-migrate</a>
+          <pre><code data-trim class="bash">npm i -D typescript ts-migrate && \
+     ts-migrate init . && \
+     ts-migrate rename . && \
+     ts-migrate --aliases=tsfixme migrate .</code></pre>
+          <ul>
+            <li>Same than above, but all at once</li>
+            <li>More <code>any</code> and <code>@ts-ignore</code></li>
+            <li><code>TSFixMe</code> alias of <code>any</code></li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>lenient TS to strict TS</h2>
+
+          <ul>
+            <li class="fragment">Remove <code>any</code></li>
+            <li class="fragment">
+              More strict configuration (<code>strictNullChecks</code>,
+              <code>noImplicitAny</code>, etc.)
+            </li>
+            <li class="fragment">No magical solution</li>
+            <li class="fragment">File by file</li>
+          </ul>
+        </section>
+
+        <section>
+            <h2>Guess the type</h2>
+            <pre><code data-trim class="javascript">
+function doSomething(n) { // n is implicitly any
+    return Number.parseInt(n);
+}
+
+console.log(doSomething('123'));
+            </code></pre>
+            <p>What's the type of <code>n</code>?</p>
+            <pre class="fragment"><code data-trim class="typescript">
+function doSomething(n: string) {
+    return Number.parseInt(n);
+}
+
+console.log(doSomething('123'));
+            </code></pre>
         </section>
 
           <section>
-              <h2>Tips & Tricks</h2>
-              * allowJS
-              * checkJS
-              * use any only needed, prefer unknown
-              * depending of the code age:
-                 - updating function + .prototype to class
-              * @ts-expect-error instead of @ts-ignore
-
-
+              <h2>Guess the type</h2>
+              <pre><code data-trim class="javascript">
+let context; // context is implicitly any
+beforeEach(() => {
+  context = { name: 'Georges' }
+})
+            </code></pre>
+              <p>What's the type of <code>context</code>?</p>
+              <pre class="fragment"><code data-trim class="typescript">
+let context: {name: string};
+beforeEach(() => {
+  context = { name: 'Georges' }
+})
+            </code></pre>
           </section>
 
           <section>
-              <h2>TS is not JS</h2>
-              * replacement of mutable code / dynamic calls /etc.
+              <h2>ts-remove-any</h2>
+              <a href="https://github.com/blemoine/ts-remove-any">https://github.com/blemoine/ts-remove-any</a>
+              <pre><cpde>npx ts-remove-any</cpde></pre>
           </section>
 
-
           <section>
-              <h2>Big bang solution</h2>
-              <a href="https://github.com/airbnb/ts-migrate">TS-migrate</a>
-              <pre><code data-trim class="bash">npm i -D typescript ts-migrate && \
-                         ts-migrate init . && \
-                         ts-migrate rename . && \
-                         ts-migrate --aliases=tsfixme migrate .</code></pre>
+              <h2>ts-remove-any</h2>
               <ul>
-                  <li>Same than above, but all at once</li>
-                  <li>More <code>any</code> and <code>ts-ignore</code></li>
-                  <li><code>TSFixMe</code> alias of <code>any</code> </li>
+                  <li>Won't remove all <code>any</code>s</li>
+                  <li>Some compilations errors may slip</li>
+                  <li>Help the migration, won't do it in your stead</li>
               </ul>
           </section>
 
           <section>
-              <h2>lenient TS to strict TS</h2>
-
+              <h2>ts-remove-any</h2>
+              <p>Contributions are welcomed</p>
               <ul>
-                  <li>File by file</li>
-                  <li>Remove <code>any</code></li>
+                  <li class="fragment">Code contribution</li>
+                  <li class="fragment">Or missing use-case</li>
               </ul>
           </section>
 
-          <section>
-              <h2>Tips & Tricks</h2>
-              <ul>
-                  <li>Use ad-hoc type</li>
-              </ul>
-          </section>
 
-          <section>
-              <h2>Ensuring nobody's else is re-adding error when fixed a file?</h2>
-          </section>
+        <section data-transition="none">
+          <h2>Ad-Hoc type</h2>
+          <pre><code data-trim class="javascript">
+function doSomething(
+  input
+) {
+    const output = input.getById(1 + input.ts);
+    return output;
+}
+            </code></pre>
+        </section>
+        <section data-transition="none">
+          <h2>Ad-Hoc type</h2>
+          <pre><code data-trim class="typescript">
+function doSomething&lt;T>(
+  input: {getById: (id: number) => T, ts: number}
+):T {
+    const output = input.getById(1 + input.ts);
+    return output;
+}
+            </code></pre>
+        </section>
 
-          <section>
-              <h2>Double tsconfig solution</h2>
-          </section>
+        <section>
+          <h2>Ensuring nobody's else is re-adding error when fixed a file?</h2>
+        </section>
 
-          <section>
-              <h2>Conclusion</h2>
-              <ul>
-                  <li>Not really hard...</li>
-                  <li>...but takes a continuous effort</li>
-              </ul>
-          </section>
+        <section>
+          <h2>Double tsconfig solution</h2>
+          <ul>
+            <li class="fragment">
+              Create a 2nd conf file (eg.<code>tsconfig.strict.json</code>)
+            </li>
+            <li class="fragment">
+              Extends the original file <code> "extends": "./tsconfig"</code>
+            </li>
+            <li class="fragment">
+              Add <code>"noEmit":true</code> and <code>"include": []</code>
+            </li>
+            <li class="fragment">
+              Add <code>"strict":true</code> (or any other options)
+            </li>
+            <li class="fragment">
+              Add file you upgrade to <code>includes</code> when you upgrade
+              them
+            </li>
+            <li class="fragment">
+              Add <code>tsc -p tsconfig.strict.json</code> in the CI
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Finishing the migration?</h2>
+          <ul>
+            <li>It takes time (weeks, months...)</li>
+            <li class="fragment">
+              Keep a steady effort (do <code>n</code> files per day, every day!)
+            </li>
+            <li class="fragment">it's worth the price</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Conclusion</h2>
+          <ul>
+            <li>Not that difficult...</li>
+            <li>...but takes a continuous effort</li>
+          </ul>
+        </section>
 
         <section>
           <h2>Questions?</h2>
