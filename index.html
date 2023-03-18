@@ -44,7 +44,6 @@
             <li class="fragment">
               Main project is 10 years old
               <span
-
                 style="text-align: center; display: inline-block; width: 100%"
                 ><img
                   alt="jurassik park gate"
@@ -110,9 +109,10 @@
               Massive usage of <code>any</code> and
               <code>@ts-expect-error</code>
             </li>
-              <li class="fragment">
-                  Non strict configuration (<code>noImplicitAny</code>, <code>strictNullChecks</code>, etc.)
-              </li>
+            <li class="fragment">
+              Non strict configuration (<code>noImplicitAny</code>,
+              <code>strictNullChecks</code>, etc.)
+            </li>
           </ul>
         </section>
 
@@ -346,16 +346,16 @@ function buildUser(attributes: Attributes): User {
         </section>
 
         <section>
-            <h2>Guess the type</h2>
-            <pre><code data-trim class="javascript">
+          <h2>Guess the type</h2>
+          <pre><code data-trim class="javascript">
 function doSomething(n) { // n is implicitly any
     return Number.parseInt(n);
 }
 
 console.log(doSomething('123'));
             </code></pre>
-            <p>What's the type of <code>n</code>?</p>
-            <pre class="fragment"><code data-trim class="typescript">
+          <p>What's the type of <code>n</code>?</p>
+          <pre class="fragment"><code data-trim class="typescript">
 function doSomething(n: string) {
     return Number.parseInt(n);
 }
@@ -364,47 +364,52 @@ console.log(doSomething('123'));
             </code></pre>
         </section>
 
-          <section>
-              <h2>Guess the type</h2>
-              <pre><code data-trim class="javascript">
+        <section>
+          <h2>Guess the type</h2>
+          <pre><code data-trim class="javascript">
 let context; // context is implicitly any
 beforeEach(() => {
   context = { name: 'Georges' }
 })
             </code></pre>
-              <p>What's the type of <code>context</code>?</p>
-              <pre class="fragment"><code data-trim class="typescript">
+          <p>What's the type of <code>context</code>?</p>
+          <pre class="fragment"><code data-trim class="typescript">
 let context: {name: string};
 beforeEach(() => {
   context = { name: 'Georges' }
 })
             </code></pre>
-          </section>
+        </section>
 
-          <section>
-              <h2>ts-remove-any</h2>
-              <a href="https://github.com/blemoine/ts-remove-any">https://github.com/blemoine/ts-remove-any</a>
-              <pre><cpde>npx ts-remove-any</cpde></pre>
-          </section>
+        <section>
+          <h2>ts-remove-any</h2>
+          <a href="https://github.com/blemoine/ts-remove-any"
+            >https://github.com/blemoine/ts-remove-any</a
+          >
+          <pre><code>npx ts-remove-any</code></pre>
+          <div class="fragment">
+            <p>Remove the <em>explicit</em> <code>any</code></p>
+            <pre><code>npx ts-remove-any -e</code></pre>
+          </div>
+        </section>
 
-          <section>
-              <h2>ts-remove-any</h2>
-              <ul>
-                  <li>Won't remove all <code>any</code>s</li>
-                  <li>Some compilations errors may slip</li>
-                  <li>Help the migration, won't do it in your stead</li>
-              </ul>
-          </section>
+        <section>
+          <h2>ts-remove-any</h2>
+          <ul>
+            <li>Won't remove all <code>any</code>s</li>
+            <li>Some compilations errors may slip</li>
+            <li>Help the migration, won't do it in your stead</li>
+          </ul>
+        </section>
 
-          <section>
-              <h2>ts-remove-any</h2>
-              <p>Contributions are welcomed</p>
-              <ul>
-                  <li class="fragment">Code contribution</li>
-                  <li class="fragment">Or missing use-case</li>
-              </ul>
-          </section>
-
+        <section>
+          <h2>ts-remove-any</h2>
+          <p>Contributions are welcomed</p>
+          <ul>
+            <li class="fragment">Code contribution</li>
+            <li class="fragment">Or missing use-case</li>
+          </ul>
+        </section>
 
         <section data-transition="none">
           <h2>Ad-Hoc type</h2>
