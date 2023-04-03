@@ -38,7 +38,7 @@
     <div class="reveal">
       <div class="slides">
         <section>
-          <h2>4 months ago...</h2>
+          <h2>8 months ago...</h2>
           <ul>
             <li>Starting a new job</li>
             <li class="fragment">
@@ -340,8 +340,39 @@ function buildUser(attributes: Attributes): User {
               More strict configuration (<code>strictNullChecks</code>,
               <code>noImplicitAny</code>, etc.)
             </li>
-            <li class="fragment">No magical solution</li>
-            <li class="fragment">File by file</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Why do we want to remove the implicit <code>any</code>?</h2>
+          <pre><code class="typescript" data-trim>
+function getAge(user) { // user is implictly any
+    return user.age;
+}
+
+              </code></pre>
+          <pre class="fragment"><code class="typescript" data-trim>
+getAge(2) // throw an Error at runtime
+              </code></pre>
+        </section>
+
+        <section>
+          <h2>How do you know which type to use instead of any?</h2>
+          <h3 class="fragment" style="font-size: 90%">
+            The slide full of theory you should forget
+          </h3>
+          <ul>
+            <li class="fragment">Use an unification approach</li>
+            <li class="fragment">
+              <div>look at Hindley-Milner for more information</div>
+              <div style="text-align: center">
+                <img
+                  style="width: 400px"
+                  alt="rules for hindley milner algorithm"
+                  src="img/hindley-milner.png"
+                />
+              </div>
+            </li>
           </ul>
         </section>
 
@@ -435,7 +466,24 @@ function doSomething&lt;T>(
         </section>
 
         <section>
-          <h2>Ensuring nobody's else is re-adding error when fixed a file?</h2>
+          <h2>Can't ChatGPT do this?</h2>
+          <ul>
+            <li>ChatGPT is able to remove the <code>any</code> with a well crafted prompt</li>
+            <li class="fragment">
+              it's even better than <code>ts-remove-any</code> on some corner
+              case
+            </li>
+            <li class="fragment">
+              <em>but</em> it's not able to load a context of 1000s of files
+            </li>
+            <li class="fragment">
+              And you cannot trust it to not change anything else than the types
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Ensuring nobody's else is re-adding errors when a file is fixed?</h2>
         </section>
 
         <section>
