@@ -7,7 +7,7 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
 
-    <title>Parametric Polymorphism</title>
+    <title>From JavaScript to TypeScript</title>
 
     <link rel="stylesheet" href="dist/reset.css" />
     <link rel="stylesheet" href="dist/reveal.css" />
@@ -76,7 +76,10 @@
             <li>
               <a href="https://twitter.com/benoit_lemoine">@benoit_lemoine</a>
             </li>
-            <li class="fragment">I have around 400 files to migrate in TS</li>
+            <li class="fragment">
+              I have around 500 files to migrate in TS...
+            </li>
+            <li class="fragment">...and 3500 strict errors to fix</li>
           </ul>
           <img
             style="display: inline-block; width: 250px; vertical-align: top"
@@ -117,6 +120,40 @@
         </section>
 
         <section>
+          <h2>Any?</h2>
+          <pre><code data-trim class="typescript">
+function getAge(a) {  // a is implicitly any
+    return Math.floor(
+      (Date.now() - new Date(a.birthDate).getTime()
+    ) / (86400 * 1000))
+}
+getName({birthdate: '2021-12-17'}) // returns NaN
+            </code></pre>
+        </section>
+
+        <section>
+          <h2>ts-expect-error?</h2>
+          <pre><code data-trim class="typescript">
+function getAge(a: Date) {
+    // The right-hand side of an arithmetic operation
+    // must be of type 'any', 'number', 'bigint' or an enum type.
+    return Math.floor(
+      (Date.now() - new Date(a.birthDate)
+    ) / (86400 * 1000))
+}
+
+            </code></pre>
+          <pre class="fragment"><code data-trim class="typescript">
+function getAge(a: Date) {
+    return Math.floor(
+      // @ts-expect-error
+      (Date.now() - new Date(a.birthDate)
+    ) / (86400 * 1000))
+}
+            </code></pre>
+        </section>
+
+        <section>
           <h2>JS to lenient TS</h2>
           <ul>
             <li>Progressive approach</li>
@@ -150,7 +187,9 @@
             <li class="fragment">
               Favor <code>@ts-expect-error</code> over <code>@ts-ignore</code>
             </li>
-            <li class="fragment">Minimize casts</li>
+            <li class="fragment">
+              Minimize casts (eg. <code>as unknown as User</code>)
+            </li>
             <li class="fragment">
               Good time to update the code to modern idioms
             </li>
@@ -167,7 +206,9 @@ function User(birthdate) {
 
 User.prototype.getAge = function() {
     var yearDuration = 24 * 60 * 60 * 1000 * 365
-    return Math.floor((Date.now() - this.birthdate.getTime()) / yearDuration);
+    return Math.floor(
+      (Date.now() - this.birthdate.getTime()) / yearDuration
+    );
 }
 
 module.exports = User
@@ -178,12 +219,14 @@ module.exports = User
           <h2>TS is not JS</h2>
 
           <pre class=""><code class="typescript" data-trim>
-class User {
+export class User {
   constructor(public birthdate: Date){}
 
   getAge(): number {
     const yearDuration = 24 * 60 * 60 * 1000 * 365
-    return Math.floor((Date.now() - this.birthdate.getTime()) / yearDuration);
+    return Math.floor(
+      (Date.now() - this.birthdate.getTime()) / yearDuration
+    );
   }
 }
                   </code></pre>
@@ -191,144 +234,140 @@ class User {
 
         <section data-transition="none">
           <h2>TS is not JS</h2>
-          <pre class=""><code class="javascript">
-function groupByAge(arr) {
-  const result = {};
-  for (let user of arr) {
-    const age = user.age;
-
-
-
-
-    if (!result[age]) { result[age] = []; }
-    result[age].push(user);
-  }
-  return result;
-}
-              </code></pre>
-        </section>
-        <section data-transition="none">
-          <h2>TS is not JS</h2>
-
           <pre class=""><code class="typescript" data-trim>
-type User = {id:string, name:string, age:number}
-function groupByAge(arr: User[]): Record&lt;string, User[]>  {
-  const result = {};
-  for (let user of arr) {
-    const age = user.age;
-// Element implicitly has an 'any' type because expression
-// of type 'number' can't be used to index type '{}'.
-// No index signature with a parameter of type 'number'
-// was found on type '{}'.(7053)
-    if (!result[age]) { result[age] = []; }
-    result[age].push(user);
-  }
-  return result;
-}
+function addFoo(arr = []) {
 
+
+    arr.push('foo');
+    return arr;
+}
               </code></pre>
         </section>
+
         <section data-transition="none">
           <h2>TS is not JS</h2>
-
           <pre class=""><code class="typescript" data-trim>
-type User = {id:string, name:string, age:number}
-function groupByAge(arr: User[]): Record&lt;string, User[]>  {
-  const result: Record&lt;string, User[]> = {};
-  for (let user of arr) {
-    const age = user.age;
-
-
-
-
-    if (!result[age]) { result[age] = []; }
-    result[age].push(user);
-  }
-  return result;
+function addFoo(arr = []) {
+// Argument of type 'string' is not assignable
+//   to parameter of type 'never'.
+    arr.push('foo');
+    return arr;
 }
+              </code></pre>
+        </section>
+        <section data-transition="none">
+          <h2>TS is not JS</h2>
+          <pre class=""><code class="typescript" data-trim>
+function addFoo(arr: string[] = []) {
 
+
+    arr.push('foo');
+    return arr;
+}
               </code></pre>
         </section>
 
         <section data-transition="none">
           <h2>TS is not JS</h2>
-          <pre class=""><code class="typescript">
+          <pre class=""><code class="javascript" data-trim>
+const obj = {};
 
-function buildUser(attributes) {
-
-
-    return attributes.reduce((acc, [key, value]) => {
-        acc[key] = value;
-
-        return acc;
-    },{})
-}
-</code></pre>
+obj.age = 12;
+              </code></pre>
         </section>
+
         <section data-transition="none">
           <h2>TS is not JS</h2>
-          <pre class=""><code data-trim class="typescript">
-type User = {id:string, age:number}
-type Attributes = [string, string | number][];
-
-function buildUser(attributes: Attributes): User {
-    // Type '{}' is missing the following
-    // properties from type 'User': id, age
-    return attributes.reduce((acc, [key, value]) => {
-        acc[key] = value;
-
-        return acc;
-    },{})
-}
-</code></pre>
+          <pre class=""><code class="javascript" data-trim>
+const obj = {};
+// Property 'age' does not exist on type '{}'
+obj.age = 12;
+              </code></pre>
         </section>
+
         <section data-transition="none">
           <h2>TS is not JS</h2>
-          <pre class=""><code data-trim class="typescript">
-type User = {id:string, age:number}
-type Attributes = [string, string | number][];
+          <pre class=""><code class="javascript" data-trim>
+const obj: {age?: number} = {};
 
-function buildUser(attributes: Attributes): User {
-    const id = attributes.find(([key]) => key === 'id');
-    const age = attributes.find(([key]) => key === 'age');
+obj.age = 12;
+              </code></pre>
+          <div class="fragment">
+            <p>Or even better...</p>
+            <pre><code class="javascript" data-trim>
+const obj = {age:12};
 
-    if (!id || !age
-        || typeof id[1] !== 'string'
-        || typeof age[1] !== 'number') {
-      throw new Error(`Invalid attributes ${attributes}`);
-    }
-    return { id: id[1], age: age[1] }
-}
-</code></pre>
-        </section>
-        <section data-transition="none">
-          <h2>TS is not JS</h2>
-          <pre class=""><code data-trim class="typescript">
-type User = {id:string, age:number}
-type Attributes = [['id', string], ['age', number]];
-
-function buildUser(attributes: Attributes): User {
-
-    return {
-      id: attributes[0][1],
-      age: attributes[1][1]
-    }
-}
-</code></pre>
+              </code></pre>
+          </div>
         </section>
 
         <section>
           <h2>Big bang solution</h2>
-          <a href="https://github.com/airbnb/ts-migrate">TS-migrate</a>
-          <pre><code data-trim class="bash">npm i -D typescript ts-migrate && \
+          <div>
+            <a href="https://github.com/airbnb/ts-migrate">TS-migrate</a>
+          </div>
+          <ul>
+            <li>Same than above, but all at once</li>
+            <li class="fragment">
+              <code>TSFixMe</code> alias of <code>any</code>
+            </li>
+            <li class="fragment">
+              More <code>any</code> and <code>@ts-expect-error</code>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Ts-Migrate</h2>
+          <div class="fragment">
+            <h3>Step 1</h3>
+            <p>
+              Add a file <code>ts-fixme.d.ts</code> in your source directory
+            </p>
+            <pre><code data-trim class="typescript">
+type $TSFixMe = any;
+type $TSFixMeFunction = (...args: any[]) => any;
+              </code></pre>
+          </div>
+          <div class="fragment">
+            <h3>step 2</h3>
+            <pre><code data-trim class="bash">npm i -D typescript ts-migrate && \
      ts-migrate init . && \
      ts-migrate rename . && \
      ts-migrate --aliases=tsfixme migrate .</code></pre>
-          <ul>
-            <li>Same than above, but all at once</li>
-            <li>More <code>any</code> and <code>@ts-ignore</code></li>
-            <li><code>TSFixMe</code> alias of <code>any</code></li>
-          </ul>
+          </div>
+        </section>
+        <section data-transition="none">
+          <h2>Ts-migrate example</h2>
+          <pre><code data-trim  class="typescript">
+class Item {
+
+
+
+  constructor(name, sellIn, quality) {
+    this.name = name
+    this.sellIn = sellIn
+    this.quality = quality
+  }
+}
+              </code> </pre>
+        </section>
+
+        <section data-transition="none">
+          <h2>Ts-migrate example</h2>
+          <pre><code data-trim  class="typescript">
+// @ts-expect-error TS(2451): Cannot redeclare block-scoped variable 'Item'.
+class Item {
+  name: $TSFixMe;
+  quality: $TSFixMe;
+  sellIn: $TSFixMe;
+  constructor(name: $TSFixMe, sellIn: $TSFixMe, quality: $TSFixMe) {
+    this.name = name
+    this.sellIn = sellIn
+    this.quality = quality
+  }
+}
+              </code> </pre>
         </section>
 
         <section>
@@ -345,19 +384,77 @@ function buildUser(attributes: Attributes): User {
 
         <section>
           <h2>Why do we want to remove the implicit <code>any</code>?</h2>
-          <pre><code class="typescript" data-trim>
-function getAge(user) { // user is implictly any
-    return user.age;
+          <pre><code data-trim class="typescript">
+function getAge(a) {  // a is implicitly any
+    return Math.floor(
+      (Date.now() - new Date(a.birthDate).getTime()
+    ) / (86400 * 1000))
+}
+getName({birthdate: '2021-12-17'}) // returns NaN
+            </code></pre>
+        </section>
+
+        <section>
+          <h2>Guess the type</h2>
+          <pre><code data-trim class="javascript">
+function doSomething(n) { // n is implicitly any
+    return Number.parseInt(n);
 }
 
-              </code></pre>
-          <pre class="fragment"><code class="typescript" data-trim>
-getAge(2) // throw an Error at runtime
-              </code></pre>
+doSomething('123');
+            </code></pre>
+          <p>What's the type of <code>n</code>?</p>
+          <ul>
+            <li class="fragment">
+              <code>n</code> is used in <code>Number.parseInt</code>:
+              <code>n</code>is a sub-type of <code>string</code>
+            </li>
+            <li class="fragment">
+              <code>doSomething</code> is called with <code>'123'</code>:
+              <code>n</code>is a super-type of <code>'123'</code>
+            </li>
+            <li class="fragment">...</li>
+            <li class="fragment"><code>n</code> is <code>'123'</code></li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Guess the type</h2>
+          <pre><code data-trim class="javascript">
+let c; // c is implicitly any
+beforeEach(() => {
+  c = { name: 'Georges' }
+  c.name = 'Peter';
+});
+            </code></pre>
+          <p>What's the type of <code>c</code>?</p>
+          <ul>
+            <li class="fragment">
+              <code>c</code> is set with <code>{name: 'Georges'}</code>:
+              <code>c</code>is a super-type of <code>{name: 'Georges'}</code>
+            </li>
+            <li class="fragment">
+              <code>c.name</code> is set with <code>'Peter'</code>:
+              <code>c</code>is a super-type of <code>{name: 'Peter'}</code>
+            </li>
+            <li class="fragment">...</li>
+            <li class="fragment">
+              <code>c</code> is <code>{name: 'Georges' | 'Peter'}</code>
+            </li>
+          </ul>
         </section>
 
         <section>
           <h2>How do you know which type to use instead of any?</h2>
+          <div class="fragment">
+            <h3>Use an unification approach</h3>
+            <img
+              style="width: 400px"
+              alt="rules for hindley milner algorithm"
+              src="img/hindley-milner.png"
+            />
+          </div>
+          <!--
           <h3 class="fragment" style="font-size: 90%">
             The slide full of theory you should forget
           </h3>
@@ -374,42 +471,7 @@ getAge(2) // throw an Error at runtime
               </div>
             </li>
           </ul>
-        </section>
-
-        <section>
-          <h2>Guess the type</h2>
-          <pre><code data-trim class="javascript">
-function doSomething(n) { // n is implicitly any
-    return Number.parseInt(n);
-}
-
-console.log(doSomething('123'));
-            </code></pre>
-          <p>What's the type of <code>n</code>?</p>
-          <pre class="fragment"><code data-trim class="typescript">
-function doSomething(n: string) {
-    return Number.parseInt(n);
-}
-
-console.log(doSomething('123'));
-            </code></pre>
-        </section>
-
-        <section>
-          <h2>Guess the type</h2>
-          <pre><code data-trim class="javascript">
-let context; // context is implicitly any
-beforeEach(() => {
-  context = { name: 'Georges' }
-})
-            </code></pre>
-          <p>What's the type of <code>context</code>?</p>
-          <pre class="fragment"><code data-trim class="typescript">
-let context: {name: string};
-beforeEach(() => {
-  context = { name: 'Georges' }
-})
-            </code></pre>
+            -->
         </section>
 
         <section>
@@ -437,8 +499,8 @@ beforeEach(() => {
           <h2>ts-remove-any</h2>
           <p>Contributions are welcomed</p>
           <ul>
-            <li class="fragment">Code contribution</li>
-            <li class="fragment">Or missing use-case</li>
+            <li class="fragment">Code</li>
+            <li class="fragment">missing use cases</li>
           </ul>
         </section>
 
@@ -468,7 +530,10 @@ function doSomething&lt;T>(
         <section>
           <h2>Can't ChatGPT do this?</h2>
           <ul>
-            <li>ChatGPT is able to remove the <code>any</code> with a well crafted prompt</li>
+            <li>
+              ChatGPT is able to remove the <code>any</code> with a well crafted
+              prompt
+            </li>
             <li class="fragment">
               it's even better than <code>ts-remove-any</code> on some corner
               case
@@ -477,13 +542,16 @@ function doSomething&lt;T>(
               <em>but</em> it's not able to load a context of 1000s of files
             </li>
             <li class="fragment">
-              And you cannot trust it to not change anything else than the types
+              And your company may not be happy for you to send all your code to
+              ChatGPT
             </li>
           </ul>
         </section>
 
         <section>
-          <h2>Ensuring nobody's else is re-adding errors when a file is fixed?</h2>
+          <h2>
+            Ensuring nobody's else is re-adding errors when a file is fixed?
+          </h2>
         </section>
 
         <section>
