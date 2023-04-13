@@ -383,7 +383,7 @@ class Item {
         </section>
 
         <section>
-          <h2>Why do we want to remove the implicit <code>any</code>?</h2>
+          <h2>Why do we want to remove implicit <code>any</code>s?</h2>
           <pre><code data-trim class="typescript">
 function getAge(a) {  // a is implicitly any
     return Math.floor(
@@ -435,9 +435,13 @@ beforeEach(() => {
             </li>
             <li class="fragment">
               <code>c.name</code> is set with <code>'Peter'</code>:
-              <code>c</code>is a super-type of <code>{name: 'Peter'}</code>
+              <code>c</code>is a sub-type of
+              <code>{name: unknown}</code>
+              <span class="fragment">
+                AND a super-type of <code>{name: 'Peter'}</code></span
+              >
             </li>
-            <li class="fragment">...</li>
+
             <li class="fragment">
               <code>c</code> is <code>{name: 'Georges' | 'Peter'}</code>
             </li>
