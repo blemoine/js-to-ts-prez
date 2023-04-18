@@ -382,7 +382,7 @@ class Item {
           </ul>
         </section>
 
-        <section>
+       <!-- <section>
           <h2>Why do we want to remove implicit <code>any</code>s?</h2>
           <pre><code data-trim class="typescript">
 function getAge(a) {  // a is implicitly any
@@ -392,7 +392,7 @@ function getAge(a) {  // a is implicitly any
 }
 getName({birthdate: '2021-12-17'}) // returns NaN
             </code></pre>
-        </section>
+        </section>-->
 
         <section>
           <h2>Guess the type</h2>
@@ -414,7 +414,7 @@ doSomething('123');
               <code>n</code>is a super-type of <code>'123'</code>
             </li>
             <li class="fragment">...</li>
-            <li class="fragment"><code>n</code> is <code>'123'</code></li>
+            <li class="fragment">type of <code>n</code> is <code>'123'</code></li>
           </ul>
         </section>
 
@@ -443,7 +443,7 @@ beforeEach(() => {
             </li>
 
             <li class="fragment">
-              <code>c</code> is <code>{name: 'Georges' | 'Peter'}</code>
+              type of <code>c</code> is <code>{name: 'Georges' | 'Peter'}</code>
             </li>
           </ul>
         </section>
